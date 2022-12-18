@@ -69,6 +69,11 @@ namespace SchoolApp.Controllers
                 return View(createGroup);
             }
         }
+        public IActionResult Show()
+        {
+            IEnumerable<Group> groups = db.Groups;
+            return View(groups);
+        }
     }
 }
 
