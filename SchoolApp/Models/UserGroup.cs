@@ -10,5 +10,7 @@ namespace SchoolApp.Models
         public int UserId { get; set; }
 
         public int GroupId { get; set; } 
+
+        public bool IsModerator { get; set; }
     }
 }

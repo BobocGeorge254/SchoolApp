@@ -9,11 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Linq;
+using SchoolApp.ViewModels;
 
 namespace SchoolApp.Controllers
 {
     [Authorize]
-    public class ArticlesController : Controller
+    public class GroupsController : Controller
     {
         private readonly ApplicationDbContext db;
 
@@ -21,7 +22,7 @@ namespace SchoolApp.Controllers
 
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public ArticlesController(
+        public GroupsController(
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager
@@ -34,54 +35,40 @@ namespace SchoolApp.Controllers
             _roleManager = roleManager;
         }
 
+        [Authorize]
+        [HttpGet]
+        [Route("/new-group")]
+        public  IActionResult New()
+        {
+            CreateGroup createGroup = new() {
+                group = new Group(),
+                categories = db.Categories 
+            };
+            return View(createGroup);
+        }
+
         // Se afiseaza lista tuturor articolelor impreuna cu categoria 
         // din care fac parte dar
         // Pentru fiecare articol se afiseaza si userul care a postat articolul respectiv
-        // HttpGet implicit
-        [Authorize(Roles = "User,Moderator,Admin")]
+        // HttpGet implicit 
+        [Authorize]
         [HttpPost]
-        public IActionResult New(Group group)
+        [Route("/new-group")]
+        public IActionResult New(CreateGroup createGroup)
         {
-           // group.GroupName = ?;
-           // group.CategoryId = ?;
-
-
+            createGroup.categories = db.Categories;
             if (ModelState.IsValid)
             {
-                db.Groups.Add(group);
+                db.Groups.Add(createGroup.group);
                 db.SaveChanges();
                 TempData["message"] = "Grupul a fost creat";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             else
             {
-                return View();
+                return View(createGroup);
             }
         }
-
-        [HttpPost]
-        [Authorize(Roles = "Moderator,Admin")]
-        public ActionResult Delete(int id)
-        {
-            Group group = db.Groups.Include("Comments")
-                                         .Where(group => group.GroupId == id)
-                                         .First();
-
-            if (group.GroupId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
-            {
-                db.Groups.Remove(group);
-                db.SaveChanges();
-                TempData["message"] = "Grupul a fost sters";
-                return RedirectToAction("Index");
-            }
-
-            else
-            {
-                TempData["message"] = "Nu aveti dreptul sa stergeti un articol care nu va apartine";
-                return RedirectToAction("Index");
-            }
-        }
-
     }
 }
 
