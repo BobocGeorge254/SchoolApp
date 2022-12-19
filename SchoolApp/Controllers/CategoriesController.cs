@@ -6,7 +6,7 @@ using SchoolApp.Models;
 
 namespace SchoolApp.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext db;
@@ -15,40 +15,25 @@ namespace SchoolApp.Controllers
         {
             db = context;
         }
-        public ActionResult Index()
-        {
-            if (TempData.ContainsKey("message"))
-            {
-                ViewBag.message = TempData["message"].ToString();
-            }
 
-            var categories = from category in db.Categories
-                             orderby category.CategoryName
-                             select category;
-            ViewBag.Categories = categories;
-            return View();
+        [Authorize]
+        [HttpGet]
+        public IActionResult New()
+        {
+            Category category = new Category();
+            return View(category); 
         }
 
-        public ActionResult Show(int id)
-        {
-            Category category = db.Categories.Find(id);
-            return View(category);
-        }
-
-        public ActionResult New()
-        {
-            return View();
-        }
-
+        [Authorize]
         [HttpPost]
-        public ActionResult New(Category cat)
+        public IActionResult New(Category cat)
         {
             if (ModelState.IsValid)
             {
                 db.Categories.Add(cat);
                 db.SaveChanges();
                 TempData["message"] = "Categoria a fost adaugata";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
             else
@@ -57,12 +42,21 @@ namespace SchoolApp.Controllers
             }
         }
 
+        public IActionResult Show()
+        {
+            IEnumerable<Category> categoryList = db.Categories;
+            return View(categoryList);
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult Edit(int id)
         {
             Category category = db.Categories.Find(id);
             return View(category);
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult Edit(int id, Category requestCategory)
         {
@@ -86,10 +80,12 @@ namespace SchoolApp.Controllers
         public ActionResult Delete(int id)
         {
             Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
+            if (category != null) 
+                db.Categories.Remove(category);
             TempData["message"] = "Categoria a fost stearsa";
             db.SaveChanges();
             return RedirectToAction("Index");
         }
     }
+
 }

@@ -1,0 +1,15 @@
+﻿@model IEnumerable<SchoolApp.Models.Category>
+
+@foreach (var category in Model)
+{
+    <div>
+        <button type ="button" class="btn btn-warning">
+            Edit
+        </button>
+        <button type ="button" class="btn btn-danger">
+            Delete
+        </button>
+        @category.CategoryName
+        <p></p>
+    </div>
+}

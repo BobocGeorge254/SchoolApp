@@ -47,10 +47,7 @@ namespace SchoolApp.Controllers
             return View(createGroup);
         }
 
-        // Se afiseaza lista tuturor articolelor impreuna cu categoria 
-        // din care fac parte dar
-        // Pentru fiecare articol se afiseaza si userul care a postat articolul respectiv
-        // HttpGet implicit 
+        
         [Authorize]
         [HttpPost]
         [Route("/new-group")]
