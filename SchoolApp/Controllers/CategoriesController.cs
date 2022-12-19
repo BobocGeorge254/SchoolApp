@@ -44,8 +44,8 @@ namespace SchoolApp.Controllers
 
         public IActionResult Show()
         {
-            IEnumerable<Category> categoryList = db.Categories;
-            return View(categoryList);
+            ViewBag.Categories = db.Categories;
+            return View();
         }
 
         [Authorize]
@@ -68,7 +68,7 @@ namespace SchoolApp.Controllers
                 category.CategoryName = requestCategory.CategoryName;
                 db.SaveChanges();
                 TempData["message"] = "Categoria a fost modificata!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -84,7 +84,7 @@ namespace SchoolApp.Controllers
                 db.Categories.Remove(category);
             TempData["message"] = "Categoria a fost stearsa";
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
     }
 

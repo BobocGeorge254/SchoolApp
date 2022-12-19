@@ -71,6 +71,41 @@ namespace SchoolApp.Controllers
             IEnumerable<Group> groups = db.Groups;
             return View(groups);
         }
+        [Authorize]
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            Group group = db.Groups.Find(id);
+            return View(group);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Edit(int id, Group requestGroup)
+        {
+            Group group = db.Groups.Find(id);
+            if(ModelState.IsValid)
+            {
+                group.GroupName = requestGroup.GroupName;
+                db.SaveChanges();
+                TempData["message"] = "Grupul a fost modificat!";
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return View(requestGroup);
+            }
+        }
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            Group group = db.Groups.Find(id);
+            if (group != null)
+                db.Groups.Remove(group);
+            TempData["message"] = "Grupul a fost stears";
+            db.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
 

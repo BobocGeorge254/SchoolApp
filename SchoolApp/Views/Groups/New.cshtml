@@ -1,5 +1,11 @@
 ﻿@model SchoolApp.ViewModels.CreateGroup
 
+<style>
+    body {
+        background-color: lightgrey ;
+    }
+</style>
+
 <div>
     @using (Html.BeginForm(actionName: "New", controllerName: "Groups", method: FormMethod.Post))
     {
