@@ -71,6 +71,16 @@ namespace SchoolApp.Controllers
             IEnumerable<Group> groups = db.Groups;
             return View(groups);
         }
+
+        public IActionResult ShowGroup(int id)
+        {
+            Group group = db.Groups.Find(id);
+            return View(group);
+        }
+
+
+
+
         [Authorize]
         [HttpGet]
         public IActionResult Edit(int id)

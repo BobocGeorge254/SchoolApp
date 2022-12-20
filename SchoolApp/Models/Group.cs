@@ -20,6 +20,9 @@ namespace SchoolApp.Models
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
+
+        [NotMapped]
+        public Message? Message { get; set; }
     }
 
 }

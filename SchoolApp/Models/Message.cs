@@ -7,7 +7,13 @@ namespace SchoolApp.Models
         [Key]
         public int MessageId { get; set; }
 
-        public int UsersGroupsId { get; set; }
+        public string? UserId { get; set; }
+
+        public virtual ApplicationUser? User { get; set; }
+
+        public string? GroupId { get; set; }
+
+        public virtual Group? Group { get; set; }   
 
         [Required(ErrorMessage = "Continutul comentariului este obligatoriu")]
         public string? Content { get; set; }
