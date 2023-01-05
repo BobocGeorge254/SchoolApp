@@ -74,6 +74,7 @@ namespace SchoolApp.Controllers
 
         public IActionResult ShowGroup(int id)
         {
+            ViewBag.GroupId = id;
             Group group = db.Groups.Find(id);
             return View(group);
         }

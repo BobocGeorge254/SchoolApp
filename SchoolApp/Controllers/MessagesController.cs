@@ -25,17 +25,34 @@ namespace SchoolApp.Controllers
 
             _roleManager = roleManager;
         }
-        /*
-        public IActionResult New(Group group , int id)
+        public IActionResult New(string id)
         {
-            if (group.Message.Content != null)
-            {
-                Message message = group.Message;
-                string userId = _userManager.GetUserId(User);
-
-                message.UsersGroupsId 
-            }
+            Console.WriteLine("aDOUACHESTIEFHSBAHFBHASBFHSABFHASBKHFBASKHFBSAHKFBSAKHBHKSA: " + id);
+            ViewBag.GroupId = id;
             return View();
-        }*/
+
+        }
+        [HttpPost]
+        public IActionResult New(string id, Message message)
+        {
+            Console.WriteLine(id);
+            Console.WriteLine("Dasdsdasdsadafffwfafwfwa2748712647812648127641286481276" + message.Content);
+            if (ModelState.IsValid)
+            {
+                Message message1 = new Message();
+                message1.GroupId = id;
+                message1.UserId = _userManager.GetUserId(User);
+                message1.Content = message.Content;
+                db.Messages.Add(message1);
+                return RedirectToAction("Index", "Home");
+                
+            }
+            else
+            {
+                return View(message);
+
+            }
+            
+        }
     }
 }
