@@ -11,7 +11,7 @@ namespace SchoolApp.Models
 
         public virtual ApplicationUser? User { get; set; }
 
-        public string? GroupId { get; set; }
+        public int? GroupId { get; set; }
 
         public virtual Group? Group { get; set; }   
 

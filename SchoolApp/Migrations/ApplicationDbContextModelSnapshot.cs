@@ -8,7 +8,7 @@ using SchoolApp.Data;
 
 #nullable disable
 
-namespace SchoolApp.Data.Migrations
+namespace SchoolApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -265,6 +265,8 @@ namespace SchoolApp.Data.Migrations
 
                     b.HasKey("GroupId");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Groups");
                 });
 
@@ -280,10 +282,17 @@ namespace SchoolApp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UsersGroupsId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("MessageId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Messages");
                 });
@@ -296,14 +305,14 @@ namespace SchoolApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserGroupId"), 1L, 1);
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsModerator")
                         .HasColumnType("bit");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserGroupId");
 
@@ -359,6 +368,37 @@ namespace SchoolApp.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SchoolApp.Models.Group", b =>
+                {
+                    b.HasOne("SchoolApp.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("SchoolApp.Models.Message", b =>
+                {
+                    b.HasOne("SchoolApp.Models.Group", "Group")
+                        .WithMany("Messages")
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("SchoolApp.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Group");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SchoolApp.Models.Group", b =>
+                {
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

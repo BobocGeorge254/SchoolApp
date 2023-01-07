@@ -38,16 +38,17 @@ namespace SchoolApp.Controllers
         [Authorize]
         [HttpGet]
         [Route("/new-group")]
-        public  IActionResult New()
+        public IActionResult New()
         {
-            CreateGroup createGroup = new() {
+            CreateGroup createGroup = new()
+            {
                 group = new Group(),
-                categories = db.Categories 
+                categories = db.Categories
             };
             return View(createGroup);
         }
 
-        
+
         [Authorize]
         [HttpPost]
         [Route("/new-group")]
@@ -95,7 +96,7 @@ namespace SchoolApp.Controllers
         public IActionResult Edit(int id, Group requestGroup)
         {
             Group group = db.Groups.Find(id);
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 group.GroupName = requestGroup.GroupName;
                 db.SaveChanges();
@@ -113,10 +114,9 @@ namespace SchoolApp.Controllers
             Group group = db.Groups.Find(id);
             if (group != null)
                 db.Groups.Remove(group);
-            TempData["message"] = "Grupul a fost stears";
+            TempData["message"] = "Grupul a fost sters";
             db.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
     }
 }
-

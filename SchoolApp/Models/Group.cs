@@ -17,12 +17,16 @@ namespace SchoolApp.Models
 
 
         [Required(ErrorMessage = "Categoria este obligatorie")]
+
+        
         public int CategoryId { get; set; }
-        [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
+        
 
         [NotMapped]
         public Message? Message { get; set; }
+
+        public virtual ICollection<Message>? Messages { get; set; }
     }
 
 }

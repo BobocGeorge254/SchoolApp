@@ -7,9 +7,9 @@ namespace SchoolApp.Models
         [Key] 
         public int UserGroupId { get; set; }
 
-        public int UserId { get; set; }
+        public string? UserId { get; set; }
 
-        public int GroupId { get; set; } 
+        public int? GroupId { get; set; } 
 
         public bool IsModerator { get; set; }
     }
