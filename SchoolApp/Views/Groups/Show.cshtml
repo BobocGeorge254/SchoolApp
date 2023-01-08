@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SchoolApp.Models.Group>
+﻿@model IEnumerable<SchoolApp.Models.UserGroup>
 
  <style>
 
@@ -22,19 +22,19 @@
 </style>
 
 <div class="grid-container">
-@foreach(var group in Model) {
+@foreach(var usergroup in Model) {
     
         <div class="card" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title" style="text-align: center">@group.GroupName</h5>
+                <h5 class="card-title" style="text-align: center">@usergroup.Group.GroupName</h5>
                  <div class="grid-item">
-             <a class="btn btn-outline-success mx-2" href="/Groups/Edit/@group.GroupId"><i class="bi bi-eye"></i>Editeaza</a>
+             <a class="btn btn-outline-success mx-2" href="/Groups/Edit/@usergroup.Group.GroupId"><i class="bi bi-eye"></i>Editeaza</a>
         </div>
          
         <div class="grid-item">
-            <a class="btn btn-outline-success mx-2" asp-action="ShowGroup" asp-controller="Groups" asp-route-id="@group.GroupId"><i class="bi bi-eye"></i>Go to Group</a>
+            <a class="btn btn-outline-success mx-2" asp-action="ShowGroup" asp-controller="Groups" asp-route-id="@usergroup.Group.GroupId"><i class="bi bi-eye"></i>Go to Group</a>
         </div>
-                <form method="post" action="/Groups/Delete/@group.GroupId" class="grid-item">
+                <form method="post" action="/Groups/Delete/@usergroup.Group.GroupId" class="grid-item">
                     <button class="btn btn-outline-danger mx-2" type="submit"><i class="bi bi-trash"></i> Sterge </button>
                 </form>
              </div>

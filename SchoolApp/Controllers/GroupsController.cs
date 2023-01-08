@@ -59,6 +59,14 @@ namespace SchoolApp.Controllers
             {
                 db.Groups.Add(createGroup.group);
                 db.SaveChanges();
+                UserGroup userGroup = new()
+                {
+                    GroupId = createGroup.group.GroupId,
+                    UserId = _userManager.GetUserId(User),
+                    IsModerator = true 
+                };
+                db.UserGroups.Add(userGroup);
+                db.SaveChanges();
                 TempData["message"] = "Grupul a fost creat";
                 return RedirectToAction("Index", "Home");
             }
@@ -69,8 +77,9 @@ namespace SchoolApp.Controllers
         }
         public IActionResult Show()
         {
-            IEnumerable<Group> groups = db.Groups;
-            return View(groups);
+            var userGroups = db.UserGroups.Where(m => m.UserId == _userManager.GetUserId(User));
+            userGroups.Select(m => m.Group).Load();
+            return View(userGroups);
         }
 
         public IActionResult ShowGroup(int id)

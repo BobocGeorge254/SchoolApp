@@ -16,5 +16,7 @@ namespace SchoolApp.Models
         [NotMapped]
         public IEnumerable<SelectListItem>? AllRoles { get; set; }
 
+        public virtual IEnumerable<UserGroup>? UserGroups { get; set; }
+
     }
 }
