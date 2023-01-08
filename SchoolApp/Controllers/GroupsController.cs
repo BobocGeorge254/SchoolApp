@@ -77,6 +77,9 @@ namespace SchoolApp.Controllers
         {
             ViewBag.GroupId = id;
             Group group = db.Groups.Find(id);
+            var messages = db.Messages.Where(m => m.GroupId == id);
+            messages.Select(m => m.User).Load();
+            ViewBag.Messages = messages;
             return View(group);
         }
 
