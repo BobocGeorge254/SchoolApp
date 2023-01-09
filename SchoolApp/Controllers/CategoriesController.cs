@@ -80,8 +80,22 @@ namespace SchoolApp.Controllers
         public ActionResult Delete(int id)
         {
             Category category = db.Categories.Find(id);
-            if (category != null) 
+            var groups = db.Groups.Where(m => m.CategoryId == id);
+            foreach (var group in groups)
+            {
+                var messages = db.Messages.Where(m => m.GroupId == group.GroupId);
+                var userGroups = db.UserGroups.Where(m => m.GroupId == group.GroupId);
+                foreach (var message in messages)
+                    db.Messages.Remove(message);
+                foreach (var userGroup in userGroups)
+                    db.UserGroups.Remove(userGroup);
+                db.Groups.Remove(group);
+            }
+            if (category != null)
+            {
                 db.Categories.Remove(category);
+                
+            }
             TempData["message"] = "Categoria a fost stearsa";
             db.SaveChanges();
             return RedirectToAction("Index", "Home");

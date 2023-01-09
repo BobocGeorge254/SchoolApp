@@ -3,9 +3,6 @@
 
 @using (Html.BeginForm(controllerName: "Messages", actionName: "Edit", method: FormMethod.Post, routeValues: new { id = Model.MessageId }))
 {
-    <div>
-        @Model.MessageId
-    </div>
     @Html.Label("Content", "Noul continut")
         <br />
     @Html.Editor("Content")

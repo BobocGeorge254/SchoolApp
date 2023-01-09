@@ -12,7 +12,7 @@ namespace SchoolApp.Models
         public virtual ApplicationUser User { get; set; }
 
         public int? GroupId { get; set; } 
-        public virtual Group Group{ get; set; }
+        public virtual Group? Group{ get; set; }
 
         public bool IsModerator { get; set; }
     }

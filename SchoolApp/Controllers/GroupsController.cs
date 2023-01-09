@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Linq;
 using SchoolApp.ViewModels;
+using System.Runtime.InteropServices;
 
 namespace SchoolApp.Controllers
 {
@@ -79,6 +80,7 @@ namespace SchoolApp.Controllers
         {
             var userGroups = db.UserGroups.Where(m => m.UserId == _userManager.GetUserId(User));
             userGroups.Select(m => m.Group).Load();
+            userGroups.Select(m => m.Group.Category).Load();
             return View(userGroups);
         }
 
@@ -91,7 +93,13 @@ namespace SchoolApp.Controllers
             ViewBag.Messages = messages;
             return View(group);
         }
-
+    
+        public IActionResult ShowAll()
+        {
+            var Groups = db.Groups;
+            Groups.Select(m => m.Category).Load();
+            return View(Groups);
+        }
 
 
 
@@ -124,11 +132,36 @@ namespace SchoolApp.Controllers
         public ActionResult Delete(int id)
         {
             Group group = db.Groups.Find(id);
+
             if (group != null)
+            {
+                var messages = db.Messages.Where(m => m.GroupId == id);
+                var userGroups = db.UserGroups.Where(m => m.GroupId == id);
                 db.Groups.Remove(group);
-            TempData["message"] = "Grupul a fost sters";
+                foreach (var message in messages)
+                    db.Messages.Remove(message);
+                foreach (var userGroup in userGroups)
+                    db.UserGroups.Remove(userGroup);
+            }
+                TempData["message"] = "Grupul a fost sters";
             db.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        public IActionResult Join(int id)
+        {
+            UserGroup currentUserGroup = db.UserGroups.FirstOrDefault(m => m.GroupId == id && m.UserId == _userManager.GetUserId(User));
+            if (currentUserGroup == null)
+            {
+                UserGroup userGroup = new();
+                userGroup.GroupId = id;
+                userGroup.UserId = _userManager.GetUserId(User);
+
+                db.UserGroups.Add(userGroup);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index", "Home");
+        }
     }
+    
 }
