@@ -43,11 +43,11 @@ namespace SchoolApp.Models
                     new ApplicationUser
                     {
                         Id = "8e445865-a24d-4543-a6c6-9443d048cdb0", // primary key
-                        UserName = "admin@test.com",
+                        UserName = "admin1@test.com",
                         EmailConfirmed = true,
-                        NormalizedEmail = "ADMIN@TEST.COM",
-                        Email = "admin@test.com",
-                        NormalizedUserName = "ADMIN@TEST.COM",
+                        NormalizedEmail = "ADMIN1@TEST.COM",
+                        Email = "admin1@test.com",
+                        NormalizedUserName = "ADMIN1@TEST.COM",
                         PasswordHash = hasher.HashPassword(null, "Admin1!")
                     },
                     new ApplicationUser
@@ -91,7 +91,7 @@ namespace SchoolApp.Models
                     }
                 );
 
-                //context.SaveChanges();
+                context.SaveChanges();
 
             }
         }

@@ -1,4 +1,4 @@
-﻿@model SchoolApp.Models.Group
+﻿@model SchoolApp.Models.Group 
 <style>
     .content {
         border-radius: 5px;
@@ -12,7 +12,10 @@
     }
 </style>
 <div class="content">
-    <a style="margin: 0 auto" class="btn btn-outline-dark" href="/Messages/New/@ViewBag.GroupId">Post Message</a>
+    <div style="display: flex;">
+        <a style="margin: 0 auto" class="btn btn-outline-dark" href="/Messages/New/@ViewBag.GroupId">Post Message</a>
+        <a style="margin: 0 1em" class="btn btn-outline-dark" href="/Groups/ViewMembers/@ViewBag.GroupId">View Members</a>
+    </div>
     @foreach (Message item in ViewBag.messages)
     {
         <div class="toast show" style="width: 100%; margin: 1em auto">

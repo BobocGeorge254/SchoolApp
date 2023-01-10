@@ -36,7 +36,7 @@ namespace SchoolApp.Controllers
             _roleManager = roleManager;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin, User, Moderator")]
         [HttpGet]
         [Route("/new-group")]
         public IActionResult New()
@@ -50,32 +50,50 @@ namespace SchoolApp.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin, User, Moderator")]
         [HttpPost]
         [Route("/new-group")]
-        public IActionResult New(CreateGroup createGroup)
+        public async Task<IActionResult> New(CreateGroup createGroup)
         {
+
+
             createGroup.categories = db.Categories;
             if (ModelState.IsValid)
             {
                 db.Groups.Add(createGroup.group);
                 db.SaveChanges();
+
+
+
                 UserGroup userGroup = new()
                 {
                     GroupId = createGroup.group.GroupId,
                     UserId = _userManager.GetUserId(User),
-                    IsModerator = true 
+                    IsModerator = true
+
+
                 };
                 db.UserGroups.Add(userGroup);
                 db.SaveChanges();
                 TempData["message"] = "Grupul a fost creat";
                 return RedirectToAction("Index", "Home");
+
+                if (User.IsInRole("User"))
+                {
+                    var user = await _userManager.FindByIdAsync(_userManager.GetUserId(User));
+                    await _userManager.RemoveFromRoleAsync(user, "User");
+                    await _userManager.AddToRoleAsync(user, "Moderator");
+                    await _userManager.UpdateAsync(user);
+
+                }
             }
             else
             {
                 return View(createGroup);
             }
         }
+
+        [Authorize(Roles = "Admin, User, Moderator")]
         public IActionResult Show()
         {
             var userGroups = db.UserGroups.Where(m => m.UserId == _userManager.GetUserId(User));
@@ -84,6 +102,7 @@ namespace SchoolApp.Controllers
             return View(userGroups);
         }
 
+        [Authorize(Roles = "Admin, User, Moderator")]
         public IActionResult ShowGroup(int id)
         {
             ViewBag.GroupId = id;
@@ -92,8 +111,11 @@ namespace SchoolApp.Controllers
             messages.Select(m => m.User).Load();
             ViewBag.Messages = messages;
             return View(group);
+
         }
-    
+
+        [Authorize(Roles = "Admin, User, Moderator")]
+
         public IActionResult ShowAll()
         {
             var Groups = db.Groups;
@@ -103,7 +125,7 @@ namespace SchoolApp.Controllers
 
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin, Moderator")]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -111,7 +133,7 @@ namespace SchoolApp.Controllers
             return View(group);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin, Moderator")]
         [HttpPost]
         public IActionResult Edit(int id, Group requestGroup)
         {
@@ -128,6 +150,8 @@ namespace SchoolApp.Controllers
                 return View(requestGroup);
             }
         }
+
+        [Authorize(Roles = "Admin, Moderator")]
         [HttpPost]
         public ActionResult Delete(int id)
         {
@@ -143,11 +167,12 @@ namespace SchoolApp.Controllers
                 foreach (var userGroup in userGroups)
                     db.UserGroups.Remove(userGroup);
             }
-                TempData["message"] = "Grupul a fost sters";
+            TempData["message"] = "Grupul a fost sters";
             db.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
         [HttpGet]
+        [Authorize(Roles = "Admin, User, Moderator")]
         public IActionResult Join(int id)
         {
             UserGroup currentUserGroup = db.UserGroups.FirstOrDefault(m => m.GroupId == id && m.UserId == _userManager.GetUserId(User));
@@ -162,6 +187,17 @@ namespace SchoolApp.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        [Authorize(Roles = "Admin, User, Moderator")]
+        public IActionResult ViewMembers(int id)
+        {
+            var userGroups = db.UserGroups.Where(m => m.GroupId == id);
+            userGroups.Select(m => m.User).Load();
+            return View(userGroups);
+        }
+
     }
-    
+
+
+
 }

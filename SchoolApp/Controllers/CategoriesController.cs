@@ -16,15 +16,15 @@ namespace SchoolApp.Controllers
             db = context;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult New()
         {
             Category category = new Category();
-            return View(category); 
+            return View(category);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult New(Category cat)
         {
@@ -48,7 +48,7 @@ namespace SchoolApp.Controllers
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult Edit(int id)
         {
@@ -56,7 +56,7 @@ namespace SchoolApp.Controllers
             return View(category);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult Edit(int id, Category requestCategory)
         {
@@ -94,7 +94,7 @@ namespace SchoolApp.Controllers
             if (category != null)
             {
                 db.Categories.Remove(category);
-                
+
             }
             TempData["message"] = "Categoria a fost stearsa";
             db.SaveChanges();

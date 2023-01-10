@@ -5,6 +5,7 @@
         display: flex;
         padding: 1em;
         justify-content: center;
+        flex-wrap: wrap ;
     }
 
     .grid-item {
@@ -17,7 +18,7 @@
         background-color: #ebfaeb;
         border-radius: 5px;
         box-shadow: 2px 2px 5px 1px #bababa;
-        margin: 1em ;
+        margin: 1em;
     }
 </style>
 
@@ -25,10 +26,12 @@
     @foreach (var group in Model)
     {
 
+        @if (User.IsInRole("Admin"))
+        {
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title" style="text-align: center">@group.GroupName - @group.Category.CategoryName</h5>
-                  
+
                     <div class="grid-item">
                         <a class="btn btn-outline-success mx-2" href="/Groups/Edit/@group.GroupId"><i class="bi bi-eye"></i>Editeaza</a>
                     </div>
@@ -39,10 +42,37 @@
                     <form method="post" action="/Groups/Delete/@group.GroupId" class="grid-item">
                         <button class="btn btn-outline-danger mx-2" type="submit"><i class="bi bi-trash"></i> Sterge </button>
                     </form>
-                     <div class="grid-item">
+                    <div class="grid-item">
                         <a class="btn btn-outline-success mx-2" asp-action="Join" asp-controller="Groups" asp-route-id="@group.GroupId"><i class="bi bi-eye"></i>Join</a>
                     </div>
                 </div>
             </div>
+        }
+
+        @if (User.IsInRole("Moderator"))
+        {
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align: center">@group.GroupName - @group.Category.CategoryName</h5>
+
+                    <div class="grid-item">
+                        <a class="btn btn-outline-success mx-2" asp-action="Join" asp-controller="Groups" asp-route-id="@group.GroupId"><i class="bi bi-eye"></i>Join</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (User.IsInRole("User"))
+        {
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align: center">@group.GroupName - @group.Category.CategoryName</h5>
+
+                    <div class="grid-item">
+                        <a class="btn btn-outline-success mx-2" asp-action="Join" asp-controller="Groups" asp-route-id="@group.GroupId"><i class="bi bi-eye"></i>Join</a>
+                    </div>
+                </div>
+            </div>
+        }
     }
 </div> 
