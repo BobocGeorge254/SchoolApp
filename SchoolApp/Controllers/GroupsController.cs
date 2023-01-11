@@ -196,8 +196,18 @@ namespace SchoolApp.Controllers
             return View(userGroups);
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin, User, Moderator")]
+        public IActionResult KickUser(int id)
+        {
+            var userGroup = db.UserGroups.FirstOrDefault(m => m.UserGroupId == id);
+            if (userGroup != null)
+            {
+                db.UserGroups.Remove(userGroup); 
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
     }
-
-
-
 }

@@ -3,7 +3,7 @@
 @foreach (var userGroup in Model)
 {
         <div class="d-flex justify-content-between">
-            <form method="post" action="#" style="display: flex; align-times: center; justify-content: center">
+            <form method="post" action="/Groups/KickUser/@userGroup.UserGroupId" style="display: flex; align-times: center; justify-content: center">
                 <button class="btn btn-outline-danger mx-2" type="submit"><i class="bi bi-trash"></i> Kick </button>
             </form>
             <div style="display: block; margin: auto">
