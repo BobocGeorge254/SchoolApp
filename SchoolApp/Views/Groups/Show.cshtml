@@ -25,7 +25,7 @@
 <div class="grid-container">
     @foreach (var usergroup in Model)
     {
-        @if (User.IsInRole("Admin"))
+        @if (User.IsInRole("Admin") || usergroup.IsModerator == true)
         {
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
@@ -65,7 +65,7 @@
             </div>
         }
 
-        @if (User.IsInRole("User"))
+        @if (User.IsInRole("User") && usergroup.IsModerator == false )
         {
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
@@ -75,7 +75,7 @@
                     <div class="grid-item">
                         <a class="btn btn-outline-success mx-2" asp-action="ShowGroup" asp-controller="Groups" asp-route-id="@usergroup.GroupId"><i class="bi bi-eye"></i>Go to Group</a>
                     </div>
-
+                    
                 </div>
             </div>
 

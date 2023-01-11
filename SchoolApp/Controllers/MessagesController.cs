@@ -46,7 +46,7 @@ namespace SchoolApp.Controllers
                 message1.Content = message.Content;
                 db.Messages.Add(message1);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                return Redirect("/Groups/ShowGroup/" + id);
                 
             }
             else
@@ -84,14 +84,14 @@ namespace SchoolApp.Controllers
                 message.Content = requestMessage.Content;
                 db.SaveChanges();
                 TempData["message"] = "Mesajul a fost modificat!";
-                return RedirectToAction("Index", "Home");
+                return Redirect("/Groups/ShowGroup/" + message.GroupId);
             }
             else
             {
                 return View(requestMessage);
             }
         }
-
+        [HttpPost]
         public ActionResult Delete(int id)
         {
             var message = db.Messages.Find(id);
@@ -99,7 +99,7 @@ namespace SchoolApp.Controllers
                 db.Messages.Remove(message);
             TempData["message"] = "Mesajul a fost sters";
             db.SaveChanges();
-            return RedirectToAction("Index", "Home");
+            return Redirect("/Groups/ShowGroup/" + message.GroupId) ;
         }
     }
 }

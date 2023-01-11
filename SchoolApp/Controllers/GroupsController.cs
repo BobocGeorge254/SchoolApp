@@ -76,7 +76,8 @@ namespace SchoolApp.Controllers
                 db.UserGroups.Add(userGroup);
                 db.SaveChanges();
                 TempData["message"] = "Grupul a fost creat";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Show", "Groups");
+
 
                 if (User.IsInRole("User"))
                 {
@@ -143,7 +144,7 @@ namespace SchoolApp.Controllers
                 group.GroupName = requestGroup.GroupName;
                 db.SaveChanges();
                 TempData["message"] = "Grupul a fost modificat!";
-                return RedirectToAction("Index", "Home");
+                return Redirect("/Groups/ShowAll");
             }
             else
             {
@@ -185,7 +186,7 @@ namespace SchoolApp.Controllers
                 db.UserGroups.Add(userGroup);
                 db.SaveChanges();
             }
-            return RedirectToAction("Index", "Home");
+            return Redirect("/Groups/ShowGroup/" + id);
         }
         [HttpGet]
         [Authorize(Roles = "Admin, User, Moderator")]
@@ -197,7 +198,7 @@ namespace SchoolApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, User, Moderator")]
+        [Authorize(Roles = "Admin, Moderator")]
         public IActionResult KickUser(int id)
         {
             var userGroup = db.UserGroups.FirstOrDefault(m => m.UserGroupId == id);
@@ -206,7 +207,7 @@ namespace SchoolApp.Controllers
                 db.UserGroups.Remove(userGroup); 
                 db.SaveChanges();
             }
-            return RedirectToAction("Index", "Home");
+            return Redirect("/Groups/Show");
         }
 
     }
